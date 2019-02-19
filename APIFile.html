@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+</head>
+<body>
+        
+<h2>Test API</h2> 
+
+<p id="app">
+
+  <input id="key" type="text" placeholder="Type the key you look for" value="AD"></input>
+  <input id="timestamp" type="number" placeholder="Type the timestamp you look for" value="0.0"></input>
+
+  <button onclick="document.displaySelection();">Lookup</button>
+
+  <p>Found: <span id="numberOfEntries">0</span> </p>
+  <p id="lookupResult">
+
+  </p>
+
+</p>
+
+<script type = "text/javascript">
+
+fetch('data.json', {'mode': 'no-cors'})
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(data) {
+    document.myData = data;
+  });
+
+document.displaySelection = function(){
+  var key = document.getElementById("key").value;
+  var timestamp = parseFloat(document.getElementById("timestamp").value);
+
+  var lookupResult = document.getElementById("lookupResult");
+  lookupResult.innerHTML = "";
+
+  var elements = document.myData.ResponseItems.map(item => item[key]).filter(item => item.Timestamp == timestamp);
+
+  document.getElementById("numberOfEntries").innerText = elements.length;
+
+  elements.forEach(element => {
+    var ptag = document.createElement("p");
+    lookupResult.appendChild(ptag);
+    ptag.innerHTML = "<div>"+JSON.stringify(element)+"</div>";
+  });
+}  
+
+</script>
+
+</body>
+</html>
